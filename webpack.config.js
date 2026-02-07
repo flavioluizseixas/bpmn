@@ -22,7 +22,8 @@ module.exports = {
   devServer: {
     static: [
       // serve o HTML e o diagram.bpmn como arquivos estáticos
-      { directory: path.resolve(__dirname, 'src') }
+      { directory: path.resolve(__dirname, 'src') },
+      { directory: path.resolve(__dirname, 'diagrams') } // ✅ novo
     ],
     port: 8080,
     open: true

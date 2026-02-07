@@ -12,7 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bpmn-js": "^18.12.0"
+    "bpmn-js": "^18.12.0",
+    "bpmn-js-token-simulation": "^0.39.1"
   },
   "devDependencies": {
     "css-loader": "^7.1.3",
