@@ -1,0 +1,68 @@
+/* =====================================================
+   Bizagi-like Theme for bpmn-js
+   Using Marker + CSS Styling
+   ===================================================== */
+
+/* ===== Estética geral ===== */
+
+.djs-element .djs-visual rect {
+  rx: 6px;
+  ry: 6px;
+  stroke-width: 2px;
+}
+
+.djs-element .djs-visual circle,
+.djs-element .djs-visual polygon {
+  stroke-width: 2px;
+}
+
+.djs-element .djs-label,
+.djs-element .djs-visual text {
+  font-family: Arial, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 12px;
+  fill: #2b2b2b;
+}
+
+/* ===== Cores via markers ===== */
+
+/* Tasks */
+.bizagi-task:not(.djs-connection) .djs-visual > :nth-child(1) {
+  fill: #FFF2CC !important;
+  stroke: #D6B656 !important;
+}
+
+/* Events */
+.bizagi-event:not(.djs-connection) .djs-visual > :nth-child(1) {
+  fill: #DDEEFF !important;
+  stroke: #2B78C5 !important;
+}
+
+/* Gateways */
+.bizagi-gateway:not(.djs-connection) .djs-visual > :nth-child(1) {
+  fill: #DFF2DF !important;
+  stroke: #2E7D32 !important;
+}
+
+/* Subprocess */
+.bizagi-subprocess:not(.djs-connection) .djs-visual > :nth-child(1) {
+  fill: #EFE3FF !important;
+  stroke: #6A1B9A !important;
+}
+
+/* Pools / Lanes */
+.bizagi-participant:not(.djs-connection) .djs-visual > :nth-child(1) {
+  fill: #F7F7F7 !important;
+  stroke: #777777 !important;
+}
+
+/* ===== Estados opcionais ===== */
+
+.bizagi-warn:not(.djs-connection) .djs-visual > :nth-child(1) {
+  fill: #FFE3E3 !important;
+  stroke: #C62828 !important;
+}
+
+.bizagi-ok:not(.djs-connection) .djs-visual > :nth-child(1) {
+  fill: #E6F4EA !important;
+  stroke: #2E7D32 !important;
+}
