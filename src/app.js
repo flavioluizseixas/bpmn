@@ -4,7 +4,7 @@ import Modeler from 'bpmn-js/lib/Modeler';
 import 'bpmn-js/dist/assets/diagram-js.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 
-// Tema Bizagi-like (Option 3)
+// Tema Bizagi-like (Marker + CSS)
 import './themes/bizagi-theme.css';
 
 // Token Simulation (módulo + CSS)
@@ -25,17 +25,22 @@ function isConnection(el) {
   return Array.isArray(el.waypoints);
 }
 
+/**
+ * Mapeia tipo BPMN -> marker CSS Bizagi-like
+ */
 function markerFor(el) {
   const t = el.type;
 
-  // Events
-  if (
-    t === 'bpmn:StartEvent' ||
-    t === 'bpmn:EndEvent' ||
-    t === 'bpmn:IntermediateThrowEvent' ||
-    t === 'bpmn:IntermediateCatchEvent' ||
-    t === 'bpmn:BoundaryEvent'
-  ) return 'bizagi-event';
+  // Start / End
+  if (t === 'bpmn:StartEvent') return 'bizagi-start-event';
+  if (t === 'bpmn:EndEvent') return 'bizagi-end-event';
+
+  // Intermediate catch vs throw
+  if (t === 'bpmn:IntermediateCatchEvent') return 'bizagi-intermediate-catch';
+  if (t === 'bpmn:IntermediateThrowEvent') return 'bizagi-intermediate-throw';
+
+  // Boundary (geralmente catch)
+  if (t === 'bpmn:BoundaryEvent') return 'bizagi-intermediate-catch';
 
   // Gateways
   if (
@@ -46,14 +51,14 @@ function markerFor(el) {
     t === 'bpmn:ComplexGateway'
   ) return 'bizagi-gateway';
 
-  // Subprocess
+  // Subprocessos
   if (
     t === 'bpmn:SubProcess' ||
     t === 'bpmn:Transaction' ||
     t === 'bpmn:AdHocSubProcess'
   ) return 'bizagi-subprocess';
 
-  // Tasks
+  // Tasks (UserTask, ServiceTask, etc.)
   if (t && t.startsWith('bpmn:') && t.endsWith('Task')) return 'bizagi-task';
 
   // Pools/Lanes
@@ -62,17 +67,26 @@ function markerFor(el) {
   return null;
 }
 
+/**
+ * Remove markers conhecidos e aplica o correto.
+ */
 function setBizagiMarker(canvas, el) {
   if (!el || isLabel(el) || isConnection(el)) return;
 
-  // remove markers conhecidos para evitar “acúmulo” em replace
   const known = [
     'bizagi-task',
-    'bizagi-event',
-    'bizagi-gateway',
     'bizagi-subprocess',
-    'bizagi-participant'
+    'bizagi-gateway',
+    'bizagi-start-event',
+    'bizagi-end-event',
+    'bizagi-intermediate-catch',
+    'bizagi-intermediate-throw',
+    'bizagi-participant',
+    // estados opcionais
+    'bizagi-warn',
+    'bizagi-ok'
   ];
+
   known.forEach((m) => canvas.removeMarker(el.id, m));
 
   const m = markerFor(el);
@@ -82,18 +96,28 @@ function setBizagiMarker(canvas, el) {
 function applyBizagiMarkersToAll(modeler) {
   const canvas = modeler.get('canvas');
   const elementRegistry = modeler.get('elementRegistry');
+
   elementRegistry.forEach((el) => setBizagiMarker(canvas, el));
 }
 
+/**
+ * Auto-aplica markers em create/paste/replace (estável).
+ */
 function enableAutoMarkers(modeler) {
   const eventBus = modeler.get('eventBus');
   const canvas = modeler.get('canvas');
 
-  eventBus.on('shape.added', (e) => setBizagiMarker(canvas, e.element));
-  eventBus.on('shape.replaced', (e) => setBizagiMarker(canvas, e.newShape || e.element));
+  eventBus.on('shape.added', (e) => {
+    setBizagiMarker(canvas, e.element);
+  });
 
-  // segurança extra quando vários mudam ao mesmo tempo (paste, etc.)
-  eventBus.on('elements.changed', (e) => (e.elements || []).forEach((el) => setBizagiMarker(canvas, el)));
+  eventBus.on('shape.replaced', (e) => {
+    setBizagiMarker(canvas, e.newShape || e.element);
+  });
+
+  eventBus.on('elements.changed', (e) => {
+    (e.elements || []).forEach((el) => setBizagiMarker(canvas, el));
+  });
 }
 
 async function run() {
@@ -105,10 +129,12 @@ async function run() {
   enableAutoMarkers(modeler);
 
   try {
+    // Forma A: ./diagrams servido como estático na raiz => /pizza-collaboration.bpmn
     const xml = await fetchDiagram('/pizza-collaboration.bpmn');
+
     await modeler.importXML(xml);
 
-    // ✅ aplica as classes/marcadores que o CSS espera
+    // aplica markers para o CSS atuar
     applyBizagiMarkersToAll(modeler);
 
     modeler.get('canvas').zoom('fit-viewport');
