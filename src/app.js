@@ -459,7 +459,7 @@ function bindFloatingToolbar(modeler) {
   });
 }
 
-function fitAndOffsetCanvas(modeler, offsetX = 50) {
+function fitAndOffsetCanvas(modeler, offsetX = 120) {
   const canvas = modeler.get('canvas');
 
   // 1) encaixa no viewport
