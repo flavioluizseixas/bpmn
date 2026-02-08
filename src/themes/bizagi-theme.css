@@ -2,7 +2,9 @@
    Bizagi-like Theme for bpmn-js (Marker + CSS Styling)
    ===================================================== */
 
-/* ===== Estética geral ===== */
+#canvas { height: 100vh; }
+
+/* ===== Base visual ===== */
 
 .djs-element .djs-visual rect {
   rx: 6px;
@@ -22,127 +24,145 @@
   fill: #2b2b2b;
 }
 
-/* Evita efeitos colaterais nas conexões */
-.djs-connection .djs-visual path {
-  stroke-width: 2px;
-}
+.djs-connection .djs-visual path { stroke-width: 2px; }
 
-/* ===== Cores por tipo (via markers) ===== */
-
-/* Tasks / Subprocess: Bizagi (azul claro + borda azul) */
-.bizagi-task:not(.djs-connection) .djs-visual > :nth-child(1),
-.bizagi-subprocess:not(.djs-connection) .djs-visual > :nth-child(1) {
+/* ===== Tasks / Subprocess ===== */
+.djs-element.bizagi-task:not(.djs-connection) .djs-visual > :nth-child(1),
+.djs-element.bizagi-subprocess:not(.djs-connection) .djs-visual > :nth-child(1) {
   fill: #EAF2FF !important;
   stroke: #0B66C3 !important;
 }
 
-/* Gateways: Bizagi (amarelo claro + borda oliva/amarela) */
-.bizagi-gateway:not(.djs-connection) .djs-visual > :nth-child(1) {
+/* ===== Gateways ===== */
+.djs-element.bizagi-gateway:not(.djs-connection) .djs-visual > :nth-child(1) {
   fill: #FFF3BF !important;
   stroke: #B59A00 !important;
 }
 
-/* Pools / Lanes (neutro) */
-.bizagi-participant:not(.djs-connection) .djs-visual > :nth-child(1) {
+/* ===== Pools / Lanes ===== */
+.djs-element.bizagi-participant:not(.djs-connection) .djs-visual > :nth-child(1) {
   fill: #FFFFFF !important;
   stroke: #BDBDBD !important;
 }
 
-/* ===== Events ===== */
-
-/* Start event (verde) */
-.bizagi-start-event:not(.djs-connection) .djs-visual circle {
+/* ===== Start / End ===== */
+.djs-element.bizagi-start-event:not(.djs-connection) .djs-visual circle {
   stroke: #2E7D32 !important;
   stroke-width: 3px !important;
 }
-.bizagi-start-event:not(.djs-connection) .djs-visual circle:first-of-type {
+.djs-element.bizagi-start-event:not(.djs-connection) .djs-visual circle:first-of-type {
   fill: #DFF5DF !important;
 }
 
-/* End event (vermelho) */
-.bizagi-end-event:not(.djs-connection) .djs-visual circle {
+.djs-element.bizagi-end-event:not(.djs-connection) .djs-visual circle {
   stroke: #C62828 !important;
   stroke-width: 4px !important;
 }
-.bizagi-end-event:not(.djs-connection) .djs-visual circle:first-of-type {
+.djs-element.bizagi-end-event:not(.djs-connection) .djs-visual circle:first-of-type {
   fill: #F9D6D5 !important;
 }
 
-/* =====================================================
-   Intermediate Events (Bizagi-like)
-   - Catch: icon outline (vazado)
-   - Throw: icon filled (preenchido) + outline
-   - Double ring (2 circles)
-   ===================================================== */
-
-/* Base ring (catch + throw) */
-.bizagi-intermediate-catch:not(.djs-connection) .djs-visual circle,
-.bizagi-intermediate-throw:not(.djs-connection) .djs-visual circle {
-  stroke: #8A8441 !important;    /* oliva Bizagi */
+/* ===== Intermediate rings ===== */
+.djs-element.bizagi-intermediate-catch:not(.djs-connection) .djs-visual circle,
+.djs-element.bizagi-intermediate-throw:not(.djs-connection) .djs-visual circle,
+.djs-element.bizagi-message-catch:not(.djs-connection) .djs-visual circle,
+.djs-element.bizagi-message-throw:not(.djs-connection) .djs-visual circle {
+  stroke: #8A8441 !important; /* oliva Bizagi */
   stroke-width: 2px !important;
 }
 
-/* Outer ring fill */
-.bizagi-intermediate-catch:not(.djs-connection) .djs-visual circle:first-of-type,
-.bizagi-intermediate-throw:not(.djs-connection) .djs-visual circle:first-of-type {
+.djs-element.bizagi-intermediate-catch:not(.djs-connection) .djs-visual circle:first-of-type,
+.djs-element.bizagi-intermediate-throw:not(.djs-connection) .djs-visual circle:first-of-type,
+.djs-element.bizagi-message-catch:not(.djs-connection) .djs-visual circle:first-of-type,
+.djs-element.bizagi-message-throw:not(.djs-connection) .djs-visual circle:first-of-type {
   fill: #FFFFFF !important;
 }
 
-/* Inner ring (sem preenchimento) */
-.bizagi-intermediate-catch:not(.djs-connection) .djs-visual circle:last-of-type,
-.bizagi-intermediate-throw:not(.djs-connection) .djs-visual circle:last-of-type {
+.djs-element.bizagi-intermediate-catch:not(.djs-connection) .djs-visual circle:last-of-type,
+.djs-element.bizagi-intermediate-throw:not(.djs-connection) .djs-visual circle:last-of-type,
+.djs-element.bizagi-message-catch:not(.djs-connection) .djs-visual circle:last-of-type,
+.djs-element.bizagi-message-throw:not(.djs-connection) .djs-visual circle:last-of-type {
   fill: none !important;
 }
 
-/* ---------- ICON: catch (outline) ---------- */
-/* Ícones internos costumam ser path/polygon/rect */
-.bizagi-intermediate-catch:not(.djs-connection) .djs-visual path,
-.bizagi-intermediate-catch:not(.djs-connection) .djs-visual polygon,
-.bizagi-intermediate-catch:not(.djs-connection) .djs-visual rect {
+/* ===== Catch icon outline ===== */
+.djs-element.bizagi-intermediate-catch:not(.djs-connection)
+.djs-visual :is(path, polygon, rect, line, polyline) {
+  fill: none !important;
+  stroke: #4A4A4A !important;
+  stroke-width: 1.4px !important;
+  stroke-linejoin: round !important;
+  stroke-linecap: round !important;
+}
+
+/* ===== Throw icon filled + outline ===== */
+.djs-element.bizagi-intermediate-throw:not(.djs-connection)
+.djs-visual :is(path, polygon, rect, line, polyline) {
+  fill: #4A4A4A !important;
+  stroke: #111111 !important;
+  stroke-width: 1.6px !important;
+  stroke-linejoin: round !important;
+  stroke-linecap: round !important;
+  paint-order: stroke fill !important;
+  vector-effect: non-scaling-stroke !important;
+  fill-rule: nonzero !important;
+}
+
+/* ===== Message catch ===== */
+.djs-element.bizagi-message-catch:not(.djs-connection)
+.djs-visual :is(path, polygon, rect, line, polyline) {
   fill: none !important;
   stroke: #4A4A4A !important;
   stroke-width: 1.5px !important;
   stroke-linejoin: round !important;
   stroke-linecap: round !important;
+  paint-order: stroke fill !important;
+  vector-effect: non-scaling-stroke !important;
 }
 
-/* ---------- ICON: throw (filled + outline) ---------- */
-/* Regra geral: preencher e manter contorno */
-.bizagi-intermediate-throw:not(.djs-connection) .djs-visual path,
-.bizagi-intermediate-throw:not(.djs-connection) .djs-visual polygon,
-.bizagi-intermediate-throw:not(.djs-connection) .djs-visual rect {
+/* ===== Message throw ===== */
+.djs-element.bizagi-message-throw:not(.djs-connection)
+.djs-visual :is(path, polygon, rect, line, polyline) {
   fill: #4A4A4A !important;
-  stroke: #2F2F2F !important;
-  stroke-width: 1.5px !important;
+  stroke: #0A0A0A !important;
+  stroke-width: 1.8px !important;
   stroke-linejoin: round !important;
   stroke-linecap: round !important;
+  paint-order: stroke fill !important;
+  vector-effect: non-scaling-stroke !important;
   fill-rule: nonzero !important;
 }
 
 /* =====================================================
-   Message Intermediate THROW - ajuste extra Bizagi
-   (evita “bloco sólido” e força linhas internas aparecerem)
+   FIX: Message THROW icon outline always visible
    ===================================================== */
 
-/*
-  No bpmn-js, o envelope pode ter linhas internas desenhadas no mesmo path/polygon.
-  Ao preencher, elas podem “sumir” se o stroke não estiver bem definido.
-  Aumentamos contraste e garantimos stroke sobre o fill.
-*/
-.bizagi-intermediate-throw:not(.djs-connection) .djs-visual path {
-  paint-order: stroke fill !important;   /* desenha contorno acima do fill */
+/* 1) garanta o anel amarelo */
+.djs-element.bizagi-message-throw:not(.djs-connection) .djs-visual circle {
+  stroke: #8A8441 !important;
 }
 
-/* =====================================================
-   Optional status markers
-   ===================================================== */
-
-.bizagi-warn:not(.djs-connection) .djs-visual > :nth-child(1) {
-  fill: #FFE3E3 !important;
-  stroke: #C62828 !important;
+/* 2) force contorno em tudo que desenha o envelope */
+.djs-element.bizagi-message-throw:not(.djs-connection) .djs-visual g *,
+.djs-element.bizagi-message-throw:not(.djs-connection) .djs-visual :is(path, polygon, rect, line, polyline) {
+  stroke: #8A8441 111 !important;
+  stroke-width: 1.6px !important;
+  stroke-linejoin: round !important;
+  stroke-linecap: round !important;
+  paint-order: stroke fill !important;
+  vector-effect: non-scaling-stroke !important;
 }
 
-.bizagi-ok:not(.djs-connection) .djs-visual > :nth-child(1) {
-  fill: #E6F4EA !important;
-  stroke: #2E7D32 !important;
+/* 3) preenchimento do throw (envelope cheio) */
+.djs-element.bizagi-message-throw:not(.djs-connection) .djs-visual :is(path, polygon, rect) {
+  fill: #4A4A4A !important;
+  fill-opacity: 1 !important;
 }
+
+/* 4) linhas internas do envelope (X/diagonais) ficam só stroke */
+.djs-element.bizagi-message-throw:not(.djs-connection) .djs-visual :is(line, polyline) {
+  fill: none !important;
+  stroke: #8A8441  !important;
+  stroke-width: 1.2px !important;
+}
+
