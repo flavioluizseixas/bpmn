@@ -2,11 +2,8 @@
 import TinyQueue from 'tinyqueue';
 import { sampleDist } from './distributions.js';
 
-<<<<<<< HEAD
 function simSafeDiv(a,b){ return b===0?0:(a/b); }
 
-=======
->>>>>>> 07166e5f76f57e06967e2b627266f2ceae26ed21
 function elementType(el) { return el?.$type || ''; }
 function isTask(t) { return t === 'bpmn:Task' || t.endsWith(':Task') || t === 'bpmn:UserTask' || t === 'bpmn:ServiceTask'; }
 function isXor(t) { return t === 'bpmn:ExclusiveGateway'; }
@@ -34,12 +31,9 @@ export async function runBatch({ graph, cfg, rng }) {
   const eventsRows = [];
   const summaryRows = [];
   const pathRows = [];
-<<<<<<< HEAD
   const proofRows = [];
   const casesRows = [];
   const taskRows = [];
-=======
->>>>>>> 07166e5f76f57e06967e2b627266f2ceae26ed21
 
   for (let rep=1; rep<=replications; rep++) {
     const repRng = rng(seedBase + rep * 1009);
@@ -47,18 +41,12 @@ export async function runBatch({ graph, cfg, rng }) {
     eventsRows.push(...res.events);
     summaryRows.push(res.summary);
     pathRows.push(...res.paths);
-<<<<<<< HEAD
     if (res.proofRows) proofRows.push(...res.proofRows);
     if (res.casesRows) casesRows.push(...res.casesRows);
     if (res.taskSpans) taskRows.push(...res.taskSpans);
   }
 
   return { eventsRows, summaryRows, pathRows, proofRows, casesRows, taskRows };
-=======
-  }
-
-  return { eventsRows, summaryRows, pathRows };
->>>>>>> 07166e5f76f57e06967e2b627266f2ceae26ed21
 }
 
 function runOne({ graph, cfg, rep, rng }) {
@@ -76,14 +64,11 @@ function runOne({ graph, cfg, rep, rng }) {
   let wipArea = 0;
   let completedCases = 0;
 
-<<<<<<< HEAD
   const caseRegistry = new Map(); // caseId -> { startTime, endTime, completed }
   const proofRows = [];
   const taskSpans = [];
   const taskStartTime = new Map(); // tokenId -> { taskId, startAt }
 
-=======
->>>>>>> 07166e5f76f57e06967e2b627266f2ceae26ed21
   const flowTraversals = new Map();
   const xorTotals = new Map();
 
@@ -98,7 +83,6 @@ function runOne({ graph, cfg, rep, rng }) {
   function updateWip(t) {
     const dt = t - lastTime;
     if (dt > 0) wipArea += activeCases * dt;
-<<<<<<< HEAD
     proofRows.push({
       scenarioId: String(cfg.scenarioId || 'scenario'),
       replication: rep,
@@ -109,8 +93,6 @@ function runOne({ graph, cfg, rep, rng }) {
       wipAreaCum: Number(wipArea.toFixed(6)),
       throughputCum: Number((completedCases / Math.max(1e-9, t)).toFixed(6))
     });
-=======
->>>>>>> 07166e5f76f57e06967e2b627266f2ceae26ed21
     lastTime = t;
   }
 
@@ -148,10 +130,7 @@ function runOne({ graph, cfg, rep, rng }) {
     const caseId = `C${rep}_${++caseSeq}`;
     const tokenId = `T${rep}_${++tokenSeq}`;
     activeCases += 1;
-<<<<<<< HEAD
     caseRegistry.set(caseId, { startTime: t, endTime: null, completed: false });
-=======
->>>>>>> 07166e5f76f57e06967e2b627266f2ceae26ed21
 
     const token = { caseId, tokenId, nodeId: startEventId };
 
@@ -183,11 +162,8 @@ function runOne({ graph, cfg, rep, rng }) {
     if (isEnd(tpe)) {
       activeCases -= 1;
       completedCases += 1;
-<<<<<<< HEAD
       const cr = caseRegistry.get(token.caseId);
       if (cr) { cr.endTime = t; cr.completed = true; caseRegistry.set(token.caseId, cr); }
-=======
->>>>>>> 07166e5f76f57e06967e2b627266f2ceae26ed21
       log({ simTime: t, eventType: 'case_end', caseId: token.caseId, tokenId: token.tokenId, elementId: el.id, elementType: tpe });
       return;
     }
@@ -225,11 +201,8 @@ function runOne({ graph, cfg, rep, rng }) {
       const dur = sampleDist(cfg.activityDurations?.[el.id] || { type:'fixed', value:1 }, rng);
       const doneAt = t + dur;
       taskInProgress.set(token.tokenId, { taskId: el.id, doneAt, canceled: false });
-<<<<<<< HEAD
       taskStartTime.set(token.tokenId, { taskId: el.id, startAt: t });
       taskStartTime.set(token.tokenId, { taskId: el.id, startAt: t });
-=======
->>>>>>> 07166e5f76f57e06967e2b627266f2ceae26ed21
 
       // boundary timers cancelActivity
       const boundaries = graph.boundaryByAttached.get(el.id) || [];
@@ -287,7 +260,6 @@ function runOne({ graph, cfg, rep, rng }) {
     if (!st || st.taskId !== taskId || st.canceled) return;
 
     log({ simTime: t, eventType: 'task_complete', caseId: token.caseId, tokenId: token.tokenId, elementId: taskId, elementType: 'task' });
-<<<<<<< HEAD
     const ts = taskStartTime.get(token.tokenId);
     if (ts && ts.taskId === taskId) {
       taskSpans.push({
@@ -302,8 +274,6 @@ function runOne({ graph, cfg, rep, rng }) {
       });
       taskStartTime.delete(token.tokenId);
     }
-=======
->>>>>>> 07166e5f76f57e06967e2b627266f2ceae26ed21
     taskInProgress.delete(token.tokenId);
 
     const outs = outgoing(taskId);
@@ -323,7 +293,6 @@ function runOne({ graph, cfg, rep, rng }) {
     taskInProgress.set(token.tokenId, st);
 
     log({ simTime: t, eventType: 'boundary_timer_fire', caseId: token.caseId, tokenId: token.tokenId, elementId: boundaryId, elementType: 'boundary_timer', fromId: attachedTaskId });
-<<<<<<< HEAD
     const ts = taskStartTime.get(token.tokenId);
     if (ts && ts.taskId === attachedTaskId) {
       taskSpans.push({
@@ -339,8 +308,6 @@ function runOne({ graph, cfg, rep, rng }) {
       });
       taskStartTime.delete(token.tokenId);
     }
-=======
->>>>>>> 07166e5f76f57e06967e2b627266f2ceae26ed21
 
     const outs = outgoing(boundaryId);
     if (!outs.length) return;
@@ -396,7 +363,6 @@ function runOne({ graph, cfg, rep, rng }) {
     }
   }
 
-<<<<<<< HEAD
   const casesRows = [];
   for (const [caseId, cr] of caseRegistry.entries()) {
     if (cr.startTime == null) continue;
@@ -414,7 +380,4 @@ function runOne({ graph, cfg, rep, rng }) {
   }
 
   return { events, summary, paths, proofRows, casesRows, taskSpans };
-=======
-  return { events, summary, paths };
->>>>>>> 07166e5f76f57e06967e2b627266f2ceae26ed21
 }
