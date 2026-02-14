@@ -1,0 +1,118 @@
+/* Bizagi palette */
+:root{
+  --bz-blue:#0B66C3;
+  --bz-blue-weak:#EAF2FF;
+  --bz-border:#BDBDBD;
+  --bz-text:#2b2b2b;
+  --bz-bg:#FFFFFF;
+  --bz-warn:#B59A00;
+  --bz-bad:#C62828;
+  --bz-good:#2E7D32;
+}
+
+/* ===============================
+   Batch-sim overlay styles
+   =============================== */
+
+.sim-toolbar {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 9999;
+  width: 380px;
+  background: rgba(255,255,255,0.96);
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+  padding: 12px;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+.sim-toolbar h3 { margin: 0 0 8px 0; font-size: 14px; }
+.sim-toolbar .row { display: flex; gap: 8px; margin: 8px 0; }
+.sim-toolbar button {
+  flex: 1;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.sim-toolbar button.primary {
+  background: #111827;
+  color: #fff;
+  border-color: #111827;
+}
+.sim-toolbar button:disabled { opacity: .55; cursor: not-allowed; }
+.sim-toolbar .small { font-size: 11px; opacity: .8; line-height: 1.35; }
+.sim-toolbar .status {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.04);
+  font-size: 12px;
+  white-space: pre-wrap;
+  max-height: 180px;
+  overflow: auto;
+}
+
+/* Heatmap bins (aplicados via canvas.addMarker) */
+.djs-overlay .sim-legend { font-size: 12px; }
+.sim-hot-1 .djs-visual > :nth-child(1),
+.sim-hot-1 .djs-visual > :nth-child(2),
+.sim-hot-1 .djs-visual > path { opacity: 0.85; }
+
+.sim-hot-2 .djs-visual > :nth-child(1),
+.sim-hot-2 .djs-visual > :nth-child(2),
+.sim-hot-2 .djs-visual > path { opacity: 0.9; }
+
+.sim-hot-3 .djs-visual > :nth-child(1),
+.sim-hot-3 .djs-visual > :nth-child(2),
+.sim-hot-3 .djs-visual > path { opacity: 0.95; }
+
+.sim-hot-4 .djs-visual > :nth-child(1),
+.sim-hot-4 .djs-visual > :nth-child(2),
+.sim-hot-4 .djs-visual > path { opacity: 1.0; }
+
+/* Stroke width heatmap for sequence flows */
+.sim-flow-1 .djs-visual > path { stroke-width: 2.5px !important; }
+.sim-flow-2 .djs-visual > path { stroke-width: 3.5px !important; }
+.sim-flow-3 .djs-visual > path { stroke-width: 4.5px !important; }
+.sim-flow-4 .djs-visual > path { stroke-width: 6px !important; }
+
+
+
+/* --- Bizagi-like toolbar tweaks --- */
+.sim-toolbar {
+  border-color: rgba(11, 102, 195, 0.25);
+}
+
+.sim-toolbar h3 {
+  color: var(--bz-text);
+}
+
+.sim-toolbar button.primary {
+  background: var(--bz-blue);
+  border-color: var(--bz-blue);
+  color: #fff;
+}
+
+.sim-toolbar button.primary:hover {
+  filter: brightness(0.95);
+}
+
+.sim-toolbar button {
+  border-color: rgba(11, 102, 195, 0.20);
+}
+
+.sim-toolbar .status {
+  background: var(--bz-blue-weak);
+  border: 1px solid rgba(11, 102, 195, 0.18);
+  color: var(--bz-text);
+}
+
+/* Heatmap legend chips */
+.sim-chip.good { background: #DFF5DF; border-color: rgba(46,125,50,0.25); }
+.sim-chip.warn { background: #FFF3BF; border-color: rgba(181,154,0,0.25); }
+.sim-chip.bad  { background: #F9D6D5; border-color: rgba(198,40,40,0.25); }

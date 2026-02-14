@@ -1,0 +1,182 @@
+/**
+ * Bizagi Viewer Theme Overlay
+ * --------------------------
+ * Objetivo: dar um visual "Bizagi-like" no BPMN Viewer (NavigatedViewer),
+ * que NÃO aplica classes de edição/seleção do Modeler.
+ *
+ * Estratégia:
+ * - Estilizar pelos próprios elementos SVG renderizados:
+ *   - rect  -> tarefas, subprocessos, pools/lanes (em geral)
+ *   - circle -> eventos
+ *   - polygon -> gateways
+ *   - path -> fluxos/associações
+ *
+ * Observação:
+ * - Este arquivo deve ser importado DEPOIS do bizagi-theme.css.
+ */
+
+:root{
+  --bz-blue: #0B66C3;
+  --bz-blue-soft: #EAF2FF;
+  --bz-blue-2: #3b6ea5;
+
+  --bz-text: #2b2b2b;
+  --bz-line: #4a4a4a;
+
+  --bz-gw-fill: #FFF6D6;
+  --bz-gw-stroke: #B38B00;
+
+  --bz-event-fill: #FFFFFF;
+  --bz-event-stroke: #0B66C3;
+
+  --bz-task-fill: #FFFFFF;
+  --bz-task-stroke: #0B66C3;
+
+  --bz-lane-fill: #FFFFFF;
+  --bz-lane-stroke: rgba(11, 102, 195, 0.35);
+
+  --bz-selected: #F59E0B;
+}
+
+/* --- Geral: textos --- */
+.djs-label {
+  fill: var(--bz-text) !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 12px !important;
+}
+
+.djs-visual text {
+  fill: var(--bz-text) !important;
+}
+
+/* --- Conexões (sequence flows) --- */
+.djs-connection path {
+  stroke: var(--bz-line) !important;
+  stroke-width: 1.4px !important;
+  fill: none !important;
+}
+
+/* --- Tarefas / subprocessos (rect) --- */
+.djs-shape .djs-visual > rect {
+  fill: var(--bz-task-fill) !important;
+  stroke: var(--bz-task-stroke) !important;
+  stroke-width: 1.6px !important;
+}
+
+/* deixa o "fundo" um pouco azulado nas tasks (opcional) */
+.djs-shape .djs-visual > rect[rx] {
+  fill: #F7FAFF !important;
+}
+
+/* --- Eventos (circle) --- */
+.djs-shape .djs-visual > circle {
+  fill: var(--bz-event-fill) !important;
+  stroke: var(--bz-event-stroke) !important;
+  stroke-width: 1.6px !important;
+}
+
+/* --- Gateways (polygon) --- */
+.djs-shape .djs-visual > polygon {
+  fill: var(--bz-gw-fill) !important;
+  stroke: var(--bz-gw-stroke) !important;
+  stroke-width: 1.6px !important;
+}
+
+/* --- Pools / Lanes (geralmente rects grandes sem rx/ry) --- */
+.djs-shape .djs-visual > rect:not([rx]) {
+  fill: var(--bz-lane-fill) !important;
+  stroke: var(--bz-lane-stroke) !important;
+  stroke-width: 1.2px !important;
+}
+
+/* --- Seleção/hover (caso você adicione markers depois) --- */
+.djs-element.djs-selected .djs-visual > :first-child,
+.djs-element.djs-hover .djs-visual > :first-child,
+.djs-element.hover .djs-visual > :first-child {
+  stroke: var(--bz-selected) !important;
+  stroke-width: 2.2px !important;
+}
+
+/* --- Melhor leitura em fundo claro --- */
+#canvas, #viewer-canvas, .viewer-canvas {
+  background: #F6F7F9;
+}
+
+/* --- Compatibilidade: alguns elementos usam <path> como shape principal --- */
+.djs-shape .djs-visual > path {
+  stroke: var(--bz-task-stroke);
+}
+
+/* --- Pequenos ícones internos (ex.: markers) --- */
+.djs-visual .djs-connection-marker path,
+.djs-visual .djs-connection-marker polygon {
+  stroke: var(--bz-line) !important;
+  fill: var(--bz-line) !important;
+}
+
+
+/* =========================
+   Start / End Events colors
+   =========================
+   bpmn-js desenha eventos com <circle>.
+   - Start: borda mais fina
+   - End: borda mais grossa (geralmente stroke-width 4)
+   - Intermediate: dois círculos (mantemos azul)
+*/
+
+/* Start Event (tenta identificar por stroke-width fino) */
+.djs-shape .djs-visual > circle[stroke-width="2"],
+.djs-shape .djs-visual > circle[style*="stroke-width: 2"] {
+  stroke: #2E7D32 !important;
+  fill: #E8F5E9 !important;
+}
+
+/* End Event (tenta identificar por stroke-width grosso) */
+.djs-shape .djs-visual > circle[stroke-width="4"],
+.djs-shape .djs-visual > circle[style*="stroke-width: 4"] {
+  stroke: #C62828 !important;
+  fill: #FFEBEE !important;
+}
+
+/* Se o end event vier com 3px (algumas versões) */
+.djs-shape .djs-visual > circle[stroke-width="3"],
+.djs-shape .djs-visual > circle[style*="stroke-width: 3"] {
+  stroke: #C62828 !important;
+  fill: #FFEBEE !important;
+}
+
+/* =========================
+   Heatmap for flows: filled arrowheads
+   ========================= */
+
+.djs-connection.sim-flow-1 path { stroke: #2E7D32 !important; stroke-width: 2.2px !important; }
+.djs-connection.sim-flow-2 path { stroke: #7CB342 !important; stroke-width: 2.2px !important; }
+.djs-connection.sim-flow-3 path { stroke: #F9A825 !important; stroke-width: 2.4px !important; }
+.djs-connection.sim-flow-4 path { stroke: #C62828 !important; stroke-width: 2.6px !important; }
+
+/* seta (marker) preenchida */
+.djs-connection.sim-flow-1 .djs-connection-marker path,
+.djs-connection.sim-flow-1 .djs-connection-marker polygon { fill: #2E7D32 !important; stroke: #2E7D32 !important; }
+
+.djs-connection.sim-flow-2 .djs-connection-marker path,
+.djs-connection.sim-flow-2 .djs-connection-marker polygon { fill: #7CB342 !important; stroke: #7CB342 !important; }
+
+.djs-connection.sim-flow-3 .djs-connection-marker path,
+.djs-connection.sim-flow-3 .djs-connection-marker polygon { fill: #F9A825 !important; stroke: #F9A825 !important; }
+
+.djs-connection.sim-flow-4 .djs-connection-marker path,
+.djs-connection.sim-flow-4 .djs-connection-marker polygon { fill: #C62828 !important; stroke: #C62828 !important; }
+
+/* Heatmap para elementos (refina cores) */
+.djs-element.sim-hot-1 .djs-visual > :first-child { stroke: #2E7D32 !important; stroke-width: 2.4px !important; }
+.djs-element.sim-hot-2 .djs-visual > :first-child { stroke: #7CB342 !important; stroke-width: 2.4px !important; }
+.djs-element.sim-hot-3 .djs-visual > :first-child { stroke: #F9A825 !important; stroke-width: 2.6px !important; }
+.djs-element.sim-hot-4 .djs-visual > :first-child { stroke: #C62828 !important; stroke-width: 2.8px !important; }
+
+
+/* Filled arrowheads (marker defs) */
+svg defs marker path,
+svg defs marker polygon {
+  fill: var(--bz-flow) !important;
+  stroke: var(--bz-flow) !important;
+}
