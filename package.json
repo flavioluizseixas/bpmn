@@ -13,7 +13,9 @@
   "license": "ISC",
   "dependencies": {
     "bpmn-js": "^18.12.0",
-    "bpmn-js-token-simulation": "^0.39.1"
+    "bpmn-js-token-simulation": "^0.39.1",
+    "bpmn-moddle": "^9.0.2",
+    "tinyqueue": "^3.0.0"
   },
   "devDependencies": {
     "css-loader": "^7.1.3",

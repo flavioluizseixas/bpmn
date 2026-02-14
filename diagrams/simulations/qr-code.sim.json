@@ -1,0 +1,34 @@
+{
+  "scenarioId": "qr-code",
+  "replications": 500,
+  "seed": 2026,
+  "startEventId": "START_PROCESS",
+  "caseArrival": {
+    "type": "exponential",
+    "mean": 1.5
+  },
+  "activityDurations": {
+    "SCAN_QR_CODE": {
+      "type": "fixed",
+      "value": 0.3
+    },
+    "sid-E49425CF-8287-4798-B622-D2A7D78EF00B": {
+      "type": "fixed",
+      "value": 0.8
+    }
+  },
+  "xorPolicies": {
+    "SCAN_OK": {
+      "type": "weighted",
+      "weightsByFlowId": {
+        "sid-8B820AF5-DC5C-4618-B854-E08B71FB55CB": 0.85,
+        "sid-337A23B9-A923-4CCE-B613-3E247B773CCE": 0.15
+      }
+    }
+  },
+  "maxSimTime": 300,
+  "maxEvents": 400000,
+  "export": {
+    "prefix": "qr-code"
+  }
+}
