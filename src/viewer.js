@@ -5,7 +5,10 @@ import 'bpmn-js/dist/assets/diagram-js.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 
 import './themes/bizagi-theme.css';
+<<<<<<< HEAD
 import './themes/bizagi-viewer.css';
+=======
+>>>>>>> 07166e5f76f57e06967e2b627266f2ceae26ed21
 import './batchsim/batch-sim.css';
 
 import BpmnModdle from 'bpmn-moddle';
@@ -57,14 +60,23 @@ function setStatus(el, txt) {
 }
 
 let currentXml = null;
+<<<<<<< HEAD
 let last = { eventsRows: [], summaryRows: [], pathRows: [], proofRows: [], casesRows: [], taskRows: [] };
+=======
+let last = { eventsRows: [], summaryRows: [], pathRows: [] };
+>>>>>>> 07166e5f76f57e06967e2b627266f2ceae26ed21
 
 (async () => {
   const canvasEl = document.getElementById('canvas');
 
   const viewer = new NavigatedViewer({
     container: canvasEl,
+<<<<<<< HEAD
     });
+=======
+    keyboard: { bindTo: window }
+  });
+>>>>>>> 07166e5f76f57e06967e2b627266f2ceae26ed21
 
   const toolbar = makeToolbar();
   document.body.appendChild(toolbar);
